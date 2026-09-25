@@ -1,0 +1,7 @@
+Metadata-Version: 2.4
+Name: mcp-api-assistant
+Version: 0.1.0
+Summary: An MCP-based AI assistant that connects models to external APIs.
+Requires-Python: >=3.10
+Requires-Dist: mcp[cli]<3,>=2.2
+Requires-Dist: httpx<1,>=0.28

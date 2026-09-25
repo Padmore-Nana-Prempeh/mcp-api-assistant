@@ -1,22 +1,40 @@
 from mcp.server import MCPServer
 
+from mcp_api_assistant.github_client import (
+    GitHubAPIError,
+    get_issue,
+)
 
-# Create our MCP server
+
 mcp = MCPServer("MCP API Assistant")
 
 
 @mcp.tool()
-def get_demo_issue(issue_number: int) -> dict:
+def get_github_issue(
+    owner: str,
+    repo: str,
+    issue_number: int,
+) -> dict:
     """
-    Return information about a demo GitHub issue.
+    Retrieve an issue from a public GitHub repository.
 
-    This is currently fake data.
-    Later, this tool will call the real GitHub REST API.
+    Args:
+        owner: GitHub username or organization that owns the repository.
+        repo: Repository name.
+        issue_number: GitHub issue number.
     """
-    return {
-        "issue_number": issue_number,
-        "title": "Demo MCP issue",
-        "status": "open",
-        "repository": "mcp-api-assistant",
-        "description": "This result came from our first MCP tool.",
-    }
+
+    try:
+        return get_issue(
+            owner=owner,
+            repo=repo,
+            issue_number=issue_number,
+        )
+
+    except GitHubAPIError as exc:
+        return {
+            "error": str(exc),
+            "owner": owner,
+            "repo": repo,
+            "issue_number": issue_number,
+        }
